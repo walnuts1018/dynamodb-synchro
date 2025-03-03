@@ -14,7 +14,9 @@ type NullTime[T synchro.TimeZone] struct {
 
 func (c NullTime[T]) MarshalDynamoDBAttributeValue() (types.AttributeValue, error) {
 	if !c.Valid {
-		return &types.AttributeValueMemberNULL{}, nil
+		return &types.AttributeValueMemberNULL{
+			Value: true,
+		}, nil
 	}
 	return c.Time.MarshalDynamoDBAttributeValue()
 }
