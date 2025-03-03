@@ -28,8 +28,12 @@ func (c *NullTime[T]) UnmarshalDynamoDBAttributeValue(av types.AttributeValue) e
 	return c.Time.UnmarshalDynamoDBAttributeValue(av)
 }
 
-func NewNullTime[T synchro.TimeZone](t Time[T], valid bool) NullTime[T] {
-	return NullTime[T]{Time: t, Valid: valid}
+func (c NullTime[T]) ToSynchro() synchro.NullTime[T] {
+	return synchro.NullTime[T]{Time: c.Time.Time, Valid: c.Valid}
+}
+
+func NewNullTime[T synchro.TimeZone](t synchro.NullTime[T]) NullTime[T] {
+	return NullTime[T]{Time: New(t.Time), Valid: t.Valid}
 }
 
 var _ attributevalue.Marshaler = NullTime[tz.UTC]{}
